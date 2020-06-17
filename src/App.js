@@ -1,25 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Link, Route, Redirect } from 'react-router-dom';
+import { LoginPage, FamilyPage, InfoPage } from './components/pages';
 import './App.css';
+import { UserContext } from './shared/contexts/userContext';
+
+// const fakeAuth = {
+//   isAuthenticated: false,
+//   authenticate(cb) {
+//     this.isAuthenticated = true;
+//     setTimeout(cb, 100); // fake async
+//   },
+//   signout(cb) {
+//     this.isAuthenticated = false;
+//     setTimeout(cb, 100); // fake async
+//   },
+// };
+
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const { authData } = UserContext();
+
+  return (
+    <Route
+      {...rest}
+      render={(props) => (authData.username ? <Component {...props} /> : <Redirect to='/login' />)}
+    />
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <ul>
+          <li>
+            <Link to='/login'>pubic login page</Link>
+          </li>
+          <li>
+            <Link to='/public'>pubic info page</Link>
+          </li>
+          <li>
+            <Link to='/family'>private family page</Link>
+          </li>
+        </ul>
+
+        <Route path='/public' component={InfoPage} />
+        <Route path='/login' component={LoginPage} />
+        <PrivateRoute path='/family' component={FamilyPage} />
+      </div>
+    </Router>
   );
 }
 
