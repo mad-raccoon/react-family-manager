@@ -1,6 +1,6 @@
 import React from 'react';
-import { UserProvider } from './shared/contexts/userContext';
+import { AuthProvider } from './shared/contexts/authContext';
 
 export const Providers = ({ children }) => {
-  return <UserProvider>{children}</UserProvider>;
+  return <AuthProvider>{children}</AuthProvider>;
 };
