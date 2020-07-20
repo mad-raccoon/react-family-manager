@@ -1,5 +1,6 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import React from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
+import RegisterForm from "../../features/Register/RegisterForm";
 
 const Register = () => {
   const history = useHistory();
@@ -7,37 +8,19 @@ const Register = () => {
   const handleRegister = (data) => {
     console.log(data);
   };
+
   const handleBackToLoginClick = () => {
-    history.push('/');
+    history.push("/");
   };
 
   return (
     <div>
-      <form onSubmit={handleRegister}>
-        <label>Email</label>
-        <br />
-        <input type='email' name='email' />
-
-        <label>Name</label>
-        <br />
-        <input type='text' name='name' />
-
-        <label>Sex</label>
-        <br />
-        <input type='text' name='name' />
-
-        <label>
-          Birthday
-          <input type='date' name='birthDate' />
-        </label>
-        <br />
-        <label>
-          Password
-          <input type='password' name='password' />
-        </label>
-        <input type='submit' value='Register' />
-        <input type='button' value='Back to login' onClick={handleBackToLoginClick} />
-      </form>
+      <RegisterForm onSuccess={handleRegister} />
+      <input
+        type="button"
+        value="Back to login"
+        onClick={handleBackToLoginClick}
+      />
     </div>
   );
 };

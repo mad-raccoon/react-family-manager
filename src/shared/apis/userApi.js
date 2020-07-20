@@ -1,3 +1,10 @@
+import { getUserByEmail, getUserCredentialsConfirmation } from "../fixtures";
+
 export const login = async (email, password) => {
-  return Promise.resolve({ email, name: email });
+  return getUserCredentialsConfirmation(email, password);
 };
+
+export const getUserInfo = async (email) => {
+  return getUserByEmail(email);
+};
+˝·
