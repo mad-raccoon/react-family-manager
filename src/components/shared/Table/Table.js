@@ -1,14 +1,7 @@
 import React from "react";
 import "./Table.css";
 
-const testHeaders = ["What?", "When?", "Who?", "Info"];
-const testBody = [
-  ["aaa", "aaa", "aaa", "aaa"],
-  ["aaa", "aaa", "aaa", "aaa"],
-  ["aaa", "aaa", "aaa", "aaa"],
-];
-
-const Table = ({ headers = testHeaders, body = testBody }) => {
+const Table = ({ headers, body, onRowClick }) => {
   return (
     <table>
       <tr>
@@ -18,8 +11,8 @@ const Table = ({ headers = testHeaders, body = testBody }) => {
       </tr>
 
       {body.map((entry) => (
-        <tr>
-          {entry.map((col) => (
+        <tr onClick={() => onRowClick(entry.id)}>
+          {entry.data.map((col) => (
             <td>{col}</td>
           ))}
         </tr>

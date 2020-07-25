@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { FamilyPage } from "../../pages";
+import { FamilyPage, ActivitiesPage } from "../../pages";
 import { NavigationHeader } from "../../shared";
 
 const Authenticated = () => {
@@ -8,14 +8,14 @@ const Authenticated = () => {
     <BrowserRouter>
       <NavigationHeader />
       <Switch>
-        <Route path="/activities">
-          <div>activities</div>
-        </Route>
         <Route path="/about">
           <div>about</div>
         </Route>
-        <Route path="/">
+        <Route path="/family">
           <FamilyPage />
+        </Route>
+        <Route path="/">
+          <ActivitiesPage />
         </Route>
       </Switch>
     </BrowserRouter>
