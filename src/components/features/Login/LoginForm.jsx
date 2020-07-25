@@ -5,8 +5,8 @@ import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
 
 const defaultValues = {
-  email: "",
-  password: "",
+  email: "user0@test.com",
+  password: "user0",
 };
 
 const resolver = yupResolver(

@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
+import { Table } from "../../shared";
 
 const Family = () => {
-  return <div>family page</div>;
+  return (
+    <div>
+      <Table />
+    </div>
+  );
 };
 
 export default Family;
