@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table } from "../../shared";
 import { ActivityForm } from "../../features";
+import { activityApi } from "../../../shared/apis";
 
 const headers = ["What?", "When?", "Who?", "Info"];
 const body = [
@@ -9,7 +10,19 @@ const body = [
   { id: 2, data: ["aaa", "aaa", "aaa", "aaa"] },
 ];
 
+const getBody = (activities) => {
+  debugger;
+  return activities.map((activity) => [
+    activity.what,
+    activity.when,
+    activity.who,
+    activity.info,
+  ]);
+};
+
 const Activities = () => {
+  const activities = activityApi.getActivities();
+
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [showActivityForm, setShowActivityForm] = useState(false);
 
@@ -28,7 +41,11 @@ const Activities = () => {
   };
   return (
     <div>
-      <Table headers={headers} body={body} onRowClick={handleActivityOpen} />
+      <Table
+        headers={headers}
+        body={getBody(activities)}
+        onRowClick={handleActivityOpen}
+      />
       {showActivityForm && (
         <ActivityForm
           activity={selectedActivity}
@@ -36,7 +53,9 @@ const Activities = () => {
           onCancel={() => setShowActivityForm(false)}
         />
       )}
-      <input type="button" value="Add activity" onClick={handleAddActivity} />
+      {!showActivityForm && (
+        <input type="button" value="Add activity" onClick={handleAddActivity} />
+      )}
     </div>
   );
 };
