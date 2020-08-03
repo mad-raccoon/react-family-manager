@@ -1,5 +1,5 @@
-import React from "react";
-import "./Table.css";
+import React from 'react';
+import './Table.css';
 
 const Table = ({ headers, body, onRowClick }) => {
   return (

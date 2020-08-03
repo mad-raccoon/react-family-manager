@@ -3,6 +3,7 @@ import React, { useReducer, useMemo, createContext } from 'react';
 const initialState = {
   email: null,
   name: null,
+  id: 0, // TODO: Change this
 };
 
 export const authReducer = (state, action) => {
@@ -12,6 +13,7 @@ export const authReducer = (state, action) => {
         ...state,
         email: action.payload.email,
         name: action.payload.name,
+        id: action.payload.id,
       };
     case 'LOGOUT':
       return {

@@ -1,20 +1,35 @@
-import React, { useState } from "react";
-import { Table } from "../../shared";
-import { ActivityForm } from "../../features";
+import React, { useState } from 'react';
+import { Table } from '../../shared';
+import { ActivityForm } from '../../features';
+import { activityApi } from '../../../shared/apis';
+import { useAuth } from '../../../shared/hooks';
 
-const headers = ["What?", "When?", "Who?", "Info"];
-const body = [
-  { id: 0, data: ["aaa", "aaa", "aaa", "aaa"] },
-  { id: 1, data: ["aaa", "aaa", "aaa", "aaa"] },
-  { id: 2, data: ["aaa", "aaa", "aaa", "aaa"] },
-];
+const headers = ['What?', 'When?', 'Who?', 'Info'];
+
+const activityTableMapper = (activity) => {
+  return {
+    id: activity.id,
+    data: [activity.what, activity.when.toDateString(), activity.who, activity.info],
+  };
+};
 
 const Activities = () => {
+  const { user } = useAuth();
+
+  const activities = activityApi
+    .getUserActivities(user.id)
+    .sort((a, b) => a.when > b.when)
+    .map((activity) => activityTableMapper(activity));
+
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [showActivityForm, setShowActivityForm] = useState(false);
 
   const handleActivityOpen = (id) => {
-    alert(id);
+    if (!selectedActivity) {
+      const activity = activityApi.getUserActivity(user.id, id);
+      setSelectedActivity(activity);
+      setShowActivityForm(true);
+    }
   };
 
   const handleAddActivity = () => {
@@ -22,21 +37,28 @@ const Activities = () => {
   };
 
   const handleAddUpdateActivity = (activity) => {
-    //api call add activity
+    activityApi.addUpdateActivity(user.id, activity);
+    setSelectedActivity(null);
+    setShowActivityForm(false);
+  };
+
+  const handleCancelAddUpdateActivity = () => {
     setSelectedActivity(null);
     setShowActivityForm(false);
   };
   return (
     <div>
-      <Table headers={headers} body={body} onRowClick={handleActivityOpen} />
+      <Table headers={headers} body={activities} onRowClick={handleActivityOpen} />
       {showActivityForm && (
         <ActivityForm
           activity={selectedActivity}
           onSuccess={handleAddUpdateActivity}
-          onCancel={() => setShowActivityForm(false)}
+          onCancel={handleCancelAddUpdateActivity}
         />
       )}
-      <input type="button" value="Add activity" onClick={handleAddActivity} />
+      {!showActivityForm && (
+        <input type='button' value={'Add activity'} onClick={handleAddActivity} />
+      )}
     </div>
   );
 };
