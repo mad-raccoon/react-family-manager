@@ -13,6 +13,11 @@ const activityTableMapper = (activity) => {
   };
 };
 
+const getBody = (activities) => {
+  debugger;
+  return activities.map((activity) => [activity.what, activity.when, activity.who, activity.info]);
+};
+
 const Activities = () => {
   const { user } = useAuth();
 

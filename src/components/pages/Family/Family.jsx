@@ -1,8 +1,11 @@
 import React from "react";
 import { Table } from "../../shared";
+import { familyApi } from "../../../shared/apis";
 
 const Family = () => {
-  return <div>familia</div>;
+  const familyMembers = familyApi.getFamilyMembers("0");
+
+  return <div>family member page</div>;
 };
 
 export default Family;
