@@ -1,0 +1,18 @@
+.family-container {
+  display: flex;
+}
+
+.family-member {
+  height: 150px;
+  width: 150px;
+  background-color: red;
+  border-radius: 50%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.family-member.me {
+  background-color: blue;
+}

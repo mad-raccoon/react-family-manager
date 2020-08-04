@@ -1,27 +1,29 @@
 let activities = [
   {
-    userId: 0,
+    userId: "0",
     activities: [
       {
-        id: '0',
-        what: 'go to the beach',
-        who: 'mon and dad',
-        when: new Date('10/10/2020'),
-        info: 'sun cream protector',
+        id: "0",
+        what: "go to the beach",
+        who: "mon and dad",
+        when: new Date("10/10/2020"),
+        info: "sun cream protector",
       },
       {
-        id: '1',
-        what: 'go to the supermarket',
-        who: 'only me',
-        when: new Date('11/10/2002'),
-        info: 'shopping bag',
+        id: "1",
+        what: "go to the supermarket",
+        who: "only me",
+        when: new Date("11/10/2002"),
+        info: "shopping bag",
       },
     ],
   },
 ];
 
 export const getActivitiesByUserId = (userId) => {
-  return activities.find((activity) => activity.userId === userId).activities || null;
+  return (
+    activities.find((activity) => activity.userId === userId).activities || null
+  );
 };
 
 export const getActivityByUserIdAndActivityId = (userId, activityId) => {
