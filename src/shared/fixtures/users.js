@@ -2,7 +2,7 @@ const users = [
   {
     id: 0,
     email: "rui@mail.com",
-    name: "rui ribeiro",
+    name: "Rui Ribeiro",
     gender: "m",
     role: "fed",
     team: 0,
