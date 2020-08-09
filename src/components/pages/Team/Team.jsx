@@ -1,14 +1,14 @@
 import React from "react";
-import { familyApi, userApi } from "../../../shared/apis";
+import { teamApi } from "../../../shared/apis";
 import { useAuth } from "../../../shared/hooks";
-import "./Family.css";
+import "./Team.css";
 import { useState } from "react";
-import FamilyMemberForm from "../../features/Family/FamilyMemberForm";
-import FamilyMemberDisplay from "../../features/Family/FamilyMemberDisplay";
+import TeamMemberForm from "../../features/Team/TeamMemberForm";
+import TeamMemberDisplay from "../../features/Team/TeamMemberDisplay";
 
-const Family = () => {
+const Team = () => {
   const { user } = useAuth();
-  const familyMembers = familyApi.getFamilyMembers(user.familyId);
+  const teamMembers = teamApi.getActiveTeamMembers(user.team);
 
   const [selectedMember, setSelectedMember] = useState(null);
   const [showMemberForm, setShowMemberForm] = useState(false);
@@ -30,16 +30,22 @@ const Family = () => {
     setShowMemberForm(false);
   };
 
-  const handleAddUpdateFamilyMember = (memberInfo) => {
-    familyApi.addUpdateFamilyMember(user.familyId, memberInfo);
+  const handleAddUpdateTeamMember = (memberInfo) => {
+    // user does not exist
+    if (!memberInfo.id) {
+      return teamApi.addTeamMember(user.team, memberInfo);
+    }
+
+    // user exist
+    return teamApi.updateTeamMember(memberInfo);
   };
 
   return (
     <div>
-      <div className="family-container">
-        {familyMembers.map((mem) => (
+      <div className="team-container">
+        {teamMembers.map((mem) => (
           <div
-            className={"family-member " + (mem.id === user.id && " me")}
+            className={"team-member " + (mem.id === user.id && " me")}
             onClick={() => !showMemberForm && handleMemberSelect(mem)}
           >
             {mem.name}
@@ -47,15 +53,15 @@ const Family = () => {
         ))}
       </div>
       {showMemberForm && (
-        <FamilyMemberForm
-          familyMember={selectedMember}
-          onSuccess={handleAddUpdateFamilyMember}
+        <TeamMemberForm
+          teamMember={selectedMember}
+          onSuccess={handleAddUpdateTeamMember}
           onCancel={handleCancel}
         />
       )}
       {showMemberInfo && (
-        <FamilyMemberDisplay
-          familyMember={selectedMember}
+        <TeamMemberDisplay
+          teamMember={selectedMember}
           isEditable={user.id === selectedMember.id}
           onEdit={handleEditMemberInfo}
           onCancel={handleCancel}
@@ -64,7 +70,7 @@ const Family = () => {
       {!showMemberForm && !showMemberInfo && (
         <input
           type="button"
-          value="Add family member"
+          value="Add team member"
           onClick={() => setShowMemberForm(true)}
         />
       )}
@@ -72,4 +78,4 @@ const Family = () => {
   );
 };
 
-export default Family;
+export default Team;

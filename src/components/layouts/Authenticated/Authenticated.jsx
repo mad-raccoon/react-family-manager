@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { FamilyPage, ActivitiesPage } from "../../pages";
+import { TeamPage, ActivitiesPage } from "../../pages";
 import { NavigationHeader } from "../../shared";
 import { useAuth } from "../../../shared/hooks";
 import "./Authenticated.css";
@@ -22,8 +22,8 @@ const Authenticated = () => {
         <Route path="/about">
           <div>about</div>
         </Route>
-        <Route path="/family">
-          <FamilyPage />
+        <Route path="/team">
+          <TeamPage />
         </Route>
         <Route path="/">
           <ActivitiesPage />

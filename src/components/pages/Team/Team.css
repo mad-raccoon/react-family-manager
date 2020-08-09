@@ -1,8 +1,8 @@
-.family-container {
+.team-container {
   display: flex;
 }
 
-.family-member {
+.team-member {
   height: 150px;
   width: 150px;
   background-color: red;
@@ -13,6 +13,6 @@
   justify-content: center;
 }
 
-.family-member.me {
+.team-member.me {
   background-color: blue;
 }

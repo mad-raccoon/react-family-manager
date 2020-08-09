@@ -1,5 +1,5 @@
-import * as userApi from './userApi';
-import * as activityApi from './activityApi';
-import * as familyApi from './familyApi';
+import * as userApi from "./userApi";
+import * as activityApi from "./activityApi";
+import * as teamApi from "./teamApi";
 
-export { userApi, activityApi, familyApi };
+export { userApi, activityApi, teamApi };

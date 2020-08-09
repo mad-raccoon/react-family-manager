@@ -4,7 +4,7 @@ import "./NavigationHeader.css";
 
 const testOptions = [
   { title: "Activity", path: "/" },
-  { title: "Family", path: "./family" },
+  { title: "Team", path: "./team" },
   { title: "About", path: "/about" },
 ];
 
