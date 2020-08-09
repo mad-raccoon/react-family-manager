@@ -1,20 +1,37 @@
 import React from "react";
-import { familyApi } from "../../../shared/apis";
+import { familyApi, userApi } from "../../../shared/apis";
 import { useAuth } from "../../../shared/hooks";
 import "./Family.css";
 import { useState } from "react";
 import FamilyMemberForm from "../../features/Family/FamilyMemberForm";
+import FamilyMemberDisplay from "../../features/Family/FamilyMemberDisplay";
 
 const Family = () => {
   const { user } = useAuth();
-  const familyMembers = familyApi.getFamilyMembers("0");
+  const familyMembers = familyApi.getFamilyMembers(user.familyId);
 
   const [selectedMember, setSelectedMember] = useState(null);
   const [showMemberForm, setShowMemberForm] = useState(false);
+  const [showMemberInfo, setShowMemberInfo] = useState(false);
 
   const handleMemberSelect = (member) => {
     setSelectedMember(member);
+    setShowMemberInfo(true);
+  };
+
+  const handleEditMemberInfo = () => {
+    setShowMemberInfo(false);
     setShowMemberForm(true);
+  };
+
+  const handleCancel = () => {
+    setSelectedMember(null);
+    setShowMemberInfo(false);
+    setShowMemberForm(false);
+  };
+
+  const handleAddUpdateFamilyMember = (memberInfo) => {
+    familyApi.addUpdateFamilyMember(user.familyId, memberInfo);
   };
 
   return (
@@ -23,7 +40,7 @@ const Family = () => {
         {familyMembers.map((mem) => (
           <div
             className={"family-member " + (mem.id === user.id && " me")}
-            onClick={() => handleMemberSelect(mem)}
+            onClick={() => !showMemberForm && handleMemberSelect(mem)}
           >
             {mem.name}
           </div>
@@ -31,15 +48,26 @@ const Family = () => {
       </div>
       {showMemberForm && (
         <FamilyMemberForm
-          memberInfo={selectedMember}
-          isEditable={selectedMember.id === user.id}
+          familyMember={selectedMember}
+          onSuccess={handleAddUpdateFamilyMember}
+          onCancel={handleCancel}
         />
       )}
-      <input
-        type="button"
-        value="Add family member"
-        onClick={() => setShowMemberForm(true)}
-      />
+      {showMemberInfo && (
+        <FamilyMemberDisplay
+          familyMember={selectedMember}
+          isEditable={user.id === selectedMember.id}
+          onEdit={handleEditMemberInfo}
+          onCancel={handleCancel}
+        />
+      )}
+      {!showMemberForm && !showMemberInfo && (
+        <input
+          type="button"
+          value="Add family member"
+          onClick={() => setShowMemberForm(true)}
+        />
+      )}
     </div>
   );
 };

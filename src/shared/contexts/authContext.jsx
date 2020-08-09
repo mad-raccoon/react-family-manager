@@ -4,6 +4,7 @@ const initialState = {
   email: null,
   name: null,
   id: "0", // TODO: Change this
+  familyId: "0", // TODO: Change this
 };
 
 export const authReducer = (state, action) => {

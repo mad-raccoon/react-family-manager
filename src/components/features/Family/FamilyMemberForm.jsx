@@ -19,14 +19,9 @@ const resolver = yupResolver(
   })
 );
 
-const FamilyMemberForm = ({
-  memberInfo = defaultValues,
-  isEditable = false,
-  onSuccess,
-  onCancel,
-}) => {
+const FamilyMemberForm = ({ familyMember, onSuccess, onCancel }) => {
   const { handleSubmit, register, errors } = useForm({
-    defaultValues: memberInfo,
+    defaultValues: familyMember || defaultValues,
     resolver,
   });
 
@@ -49,7 +44,11 @@ const FamilyMemberForm = ({
 
         <label>Gender</label>
         <br />
-        <input type="text" name="gender" ref={register} />
+        <select name="gender" ref={register}>
+          <option value=""></option>
+          <option value="f">Female</option>
+          <option value="m">Male</option>
+        </select>
         <div className="error">{errors.gender && errors.gender.message}</div>
 
         <label>Birth date</label>
@@ -58,7 +57,7 @@ const FamilyMemberForm = ({
         <div className="error">
           {errors.birthDate && errors.birthDate.message}
         </div>
-        {isEditable && <input type="submit" value={"Update info"} />}
+        <input type="submit" value={familyMember ? "Update" : "Add"} />
         <input type="button" value="Cancel" onClick={onCancel} />
       </form>
     </div>
