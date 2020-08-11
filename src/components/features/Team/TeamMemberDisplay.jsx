@@ -1,40 +1,38 @@
-import React from "react";
+import React from 'react';
 
-const FamilyMemberDisplay = ({
-  familyMember,
-  isEditable,
-  onCancel,
-  onEdit,
-}) => {
+const FamilyMemberDisplay = ({ teamMember, roles, genders, isEditable, onCancel, onEdit }) => {
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div>
           <label>Name</label>
           <br />
-          <input disabled value={familyMember.name} />
+          <input disabled value={teamMember.name} />
           <br />
           <label>Email</label>
           <br />
-          <input disabled value={familyMember.email} />
+          <input disabled value={teamMember.email} />
         </div>
         <div>
           <label>Gender</label>
           <br />
-          <select value={familyMember.gender} disabled>
-            <option value=""></option>
-            <option value="f">Female</option>
-            <option value="m">Male</option>
+          <input disabled value={genders.find((gen) => gen.value === teamMember.gender).name} />
+          <br />
+          <label>Role</label>
+          <br />
+          <select value={teamMember.role} disabled>
+            <option value=''></option>
+            {roles.map((role) => (
+              <option key={role.value} value={role.value}>
+                {role.name}
+              </option>
+            ))}
           </select>
-          <br />
-          <label>Birth date</label>
-          <br />
-          <input disabled value={familyMember.birthDate} />
         </div>
       </div>
       <div>
-        {isEditable && <input type="button" value="Edit" onClick={onEdit} />}
-        <input type="button" value="Cancel" onClick={onCancel} />
+        {isEditable && <input type='button' value='Edit' onClick={onEdit} />}
+        <input type='button' value='Cancel' onClick={onCancel} />
       </div>
     </>
   );

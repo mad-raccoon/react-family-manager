@@ -1,27 +1,29 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers";
-import * as yup from "yup";
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers';
+import * as yup from 'yup';
 
 const defaultValues = {
+  id: null,
   email: null,
   name: null,
   gender: null,
-  birthDate: null,
+  role: null,
 };
 
 const resolver = yupResolver(
   yup.object().shape({
-    email: yup.string().email("Invalid format !").required("Required !"),
-    name: yup.string().required("Required !"),
-    gender: yup.string().required("Required !"),
-    birthDate: yup.date().required("Required !"),
+    id: yup.number().nullable(),
+    email: yup.string().email('Invalid format !').required('Required !'),
+    name: yup.string().required('Required !'),
+    gender: yup.string().required('Required !'),
+    role: yup.string(),
   })
 );
 
-const FamilyMemberForm = ({ familyMember, onSuccess, onCancel }) => {
+const TeamMemberForm = ({ teamMember, roles, genders, onSuccess, onCancel }) => {
   const { handleSubmit, register, errors } = useForm({
-    defaultValues: familyMember || defaultValues,
+    defaultValues: teamMember || defaultValues,
     resolver,
   });
 
@@ -32,36 +34,45 @@ const FamilyMemberForm = ({ familyMember, onSuccess, onCancel }) => {
   return (
     <div>
       <form onSubmit={handleSubmit(handleUpdate)}>
+        <input type='hidden' name='id' ref={register} />
         <label>Email</label>
         <br />
-        <input type="text" name="email" ref={register} />
-        <div className="error">{errors.email && errors.email.message}</div>
+        <input type='text' name='email' ref={register} />
+        <div className='error'>{errors.email && errors.email.message}</div>
 
         <label>Name</label>
         <br />
-        <input type="text" name="name" ref={register} />
-        <div className="error">{errors.name && errors.name.message}</div>
+        <input type='text' name='name' ref={register} />
+        <div className='error'>{errors.name && errors.name.message}</div>
 
         <label>Gender</label>
         <br />
-        <select name="gender" ref={register}>
-          <option value=""></option>
-          <option value="f">Female</option>
-          <option value="m">Male</option>
-        </select>
-        <div className="error">{errors.gender && errors.gender.message}</div>
 
-        <label>Birth date</label>
+        {genders.map((gen) => (
+          <div key={gen.value}>
+            <input type='radio' name='gender' value={gen.value} ref={register} />
+            <label for={gen.value}>{gen.name}</label>
+          </div>
+        ))}
+
+        <div className='error'>{errors.gender && errors.gender.message}</div>
+
+        <label>Role</label>
         <br />
-        <input type="date" name="birthDate" ref={register} />
-        <div className="error">
-          {errors.birthDate && errors.birthDate.message}
-        </div>
-        <input type="submit" value={familyMember ? "Update" : "Add"} />
-        <input type="button" value="Cancel" onClick={onCancel} />
+        <select ref={register}>
+          <option value=''></option>
+          {roles.map((role) => (
+            <option key={role.value} value={role.value}>
+              {role.name}
+            </option>
+          ))}
+        </select>
+        <div className='error'>{errors.birthDate && errors.birthDate.message}</div>
+        <input type='submit' value={teamMember ? 'Update' : 'Add'} />
+        <input type='button' value='Cancel' onClick={onCancel} />
       </form>
     </div>
   );
 };
 
-export default FamilyMemberForm;
+export default TeamMemberForm;
