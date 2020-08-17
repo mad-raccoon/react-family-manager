@@ -3,16 +3,22 @@
 }
 
 .team-member {
-  height: 150px;
-  width: 150px;
-  background-color: red;
+  height: 100px;
+  width: 100px;
+  background-color: royalblue;
   border-radius: 50%;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  cursor: pointer;
 }
 
 .team-member.me {
-  background-color: orange;
+  background-color: blue;
+}
+
+.team-member.selected {
+  border: 2px solid black;
 }

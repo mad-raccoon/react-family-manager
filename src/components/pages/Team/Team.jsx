@@ -1,70 +1,84 @@
-import React from 'react';
-import { teamApi } from '../../../shared/apis';
-import { useAuth } from '../../../shared/hooks';
-import './Team.css';
-import { useState } from 'react';
-import TeamMemberForm from '../../features/Team/TeamMemberForm';
-import TeamMemberDisplay from '../../features/Team/TeamMemberDisplay';
+import React from "react";
+import { teamApi } from "../../../shared/apis";
+import { useAuth } from "../../../shared/hooks";
+import "./Team.css";
+import { useState } from "react";
+import TeamMemberForm from "../../features/Team/TeamMemberForm";
+import TeamMemberDisplay from "../../features/Team/TeamMemberDisplay";
 
 const roles = [
-  { value: 'tl', name: 'Team Leader' },
-  { value: 'fed', name: 'Frontend Developer' },
-  { value: 'bed', name: 'Backend Developer' },
-  { value: 'dbd', name: 'Database Developer' },
-  { value: 'tt', name: 'Tester' },
+  { value: "tl", name: "Team Leader" },
+  { value: "fed", name: "Frontend Developer" },
+  { value: "bed", name: "Backend Developer" },
+  { value: "dbd", name: "Database Developer" },
+  { value: "tt", name: "Tester" },
 ];
 
 const genders = [
-  { value: 'm', name: 'Male' },
-  { value: 'f', name: 'Female' },
+  { value: "m", name: "Male" },
+  { value: "f", name: "Female" },
 ];
+
+const memberAreas = {
+  DISPLAY: "display",
+  FORM: "form",
+};
 
 const Team = () => {
   const { user } = useAuth();
   const teamMembers = teamApi.getActiveTeamMembers(user.team);
 
   const [selectedMember, setSelectedMember] = useState(null);
-  const [showMemberForm, setShowMemberForm] = useState(false);
-  const [showMemberInfo, setShowMemberInfo] = useState(false);
+  const [memberArea, setMemberArea] = useState(null);
 
   const handleMemberSelect = (member) => {
+    if (member === selectedMember) {
+      setSelectedMember(null);
+      setMemberArea(null);
+      return;
+    }
     setSelectedMember(member);
-    setShowMemberInfo(true);
+    setMemberArea(memberAreas.DISPLAY);
   };
 
   const handleEditMemberInfo = () => {
-    setShowMemberInfo(false);
-    setShowMemberForm(true);
+    setMemberArea(memberAreas.FORM);
   };
 
   const handleCancel = () => {
     setSelectedMember(null);
-    setShowMemberInfo(false);
-    setShowMemberForm(false);
+    setMemberArea(null);
   };
 
   const handleAddUpdateTeamMember = (memberInfo) => {
     if (!memberInfo.id && memberInfo.id !== 0) {
-      return teamApi.addTeamMember(user.team, memberInfo);
+      teamApi.addTeamMember(user.team, memberInfo);
     }
 
-    return teamApi.updateTeamMember(memberInfo);
+    teamApi.updateTeamMember(memberInfo);
+    setMemberArea(memberAreas.DISPLAY);
   };
 
   return (
     <div>
-      <div className='team-container'>
+      <div className="team-container">
         {teamMembers.map((mem) => (
           <div
             key={mem.id}
-            className={'team-member ' + (mem.id === user.id && ' me')}
-            onClick={() => !showMemberForm && handleMemberSelect(mem)}
+            className={
+              "team-member " +
+              (mem.id === user.id ? " me" : "") +
+              (mem === selectedMember ? " selected" : "")
+            }
+            onClick={() =>
+              memberArea !== memberAreas.FORM && handleMemberSelect(mem)
+            }
           >
             {mem.name}
           </div>
         ))}
       </div>
-      {showMemberForm && (
+      {memberArea === memberAreas.FORM && (
         <TeamMemberForm
           teamMember={selectedMember}
           roles={roles}
@@ -73,7 +87,7 @@ const Team = () => {
           onCancel={handleCancel}
         />
       )}
-      {showMemberInfo && (
+      {memberArea === memberAreas.DISPLAY && (
         <TeamMemberDisplay
           teamMember={selectedMember}
           roles={roles}
@@ -83,8 +97,12 @@ const Team = () => {
           onCancel={handleCancel}
         />
       )}
-      {!showMemberForm && !showMemberInfo && (
-        <input type='button' value='Add team member' onClick={() => setShowMemberForm(true)} />
+      {!memberArea && (
+        <input
+          type="button"
+          value="Add team member"
+          onClick={() => setMemberArea(memberAreas.FORM)}
+        />
       )}
     </div>
   );
