@@ -1,6 +1,6 @@
 import * as usersBE from "./users";
-export * from "./activity";
+import * as plansBE from "./plans";
 // export * from "./users";
 // export * from './activities';
 
-export { usersBE };
+export { usersBE, plansBE };

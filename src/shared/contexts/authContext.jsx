@@ -1,23 +1,23 @@
-import React, { useReducer, useMemo, createContext } from 'react';
+import React, { useReducer, useMemo, createContext } from "react";
 
 const initialState = {
   email: null,
   name: null,
   id: 0, // TODO: Change this
-  team: 0, // TODO: Change this
+  teamId: 0, // TODO: Change this
   isTeamLeader: true, // TODO: Change this
 };
 
 export const authReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN':
+    case "LOGIN":
       return {
         ...state,
         email: action.payload.email,
         name: action.payload.name,
         id: action.payload.id,
       };
-    case 'LOGOUT':
+    case "LOGOUT":
       return {
         initialState,
       };
@@ -41,5 +41,7 @@ export const AuthProvider = ({ children, authState }) => {
     return { state, dispatch };
   }, [state, dispatch]);
 
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
 };

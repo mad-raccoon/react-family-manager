@@ -1,9 +1,15 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { TeamPage, ActivitiesPage } from "../../pages";
+import { TeamPage, PlanPage } from "../../pages";
 import { NavigationHeader } from "../../shared";
 import { useAuth } from "../../../shared/hooks";
 import "./Authenticated.css";
+
+const navigationOptions = [
+  { title: "Plan", path: "/" },
+  { title: "Team", path: "./team" },
+  { title: "About", path: "/about" },
+];
 
 const Authenticated = () => {
   const { logout } = useAuth();
@@ -15,7 +21,7 @@ const Authenticated = () => {
   return (
     <BrowserRouter>
       <div className="header">
-        <NavigationHeader />
+        <NavigationHeader options={navigationOptions} />
         <input type="button" value="Logout" onClick={handleLogout} />
       </div>
       <Switch>
@@ -26,7 +32,7 @@ const Authenticated = () => {
           <TeamPage />
         </Route>
         <Route path="/">
-          <ActivitiesPage />
+          <PlanPage />
         </Route>
       </Switch>
     </BrowserRouter>

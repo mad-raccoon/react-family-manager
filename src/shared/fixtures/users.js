@@ -68,7 +68,10 @@ const users = [
 export const getUserByEmail = (email) =>
   users.find((user) => user.email === email);
 
-const userCredentials = [{ email: "rui@mail.com", password: "user" }];
+const userCredentials = [
+  { email: "rui@mail.com", password: "user" },
+  { email: "martim@mail.com", password: "user" },
+];
 
 export const getUserCredentialsConfirmation = (email, password) =>
   userCredentials.some(

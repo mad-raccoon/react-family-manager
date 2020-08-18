@@ -1,28 +1,38 @@
-import React, { useState } from 'react';
-import { Table } from '../../shared';
-import { ActivityForm } from '../../features';
-import { activityApi } from '../../../shared/apis';
-import { useAuth } from '../../../shared/hooks';
+import React, { useState } from "react";
+import { Table } from "../../shared";
+import { ActivityForm } from "../../features";
+import { planApi } from "../../../shared/apis";
+import { useAuth } from "../../../shared/hooks";
 
-const headers = ['What?', 'When?', 'Who?', 'Info'];
+const headers = ["What?", "When?", "Who?", "Info"];
 
 const activityTableMapper = (activity) => {
   return {
     id: activity.id,
-    data: [activity.what, activity.when.toDateString(), activity.who, activity.info],
+    data: [
+      activity.what,
+      activity.when.toDateString(),
+      activity.who,
+      activity.info,
+    ],
   };
 };
 
 const getBody = (activities) => {
   debugger;
-  return activities.map((activity) => [activity.what, activity.when, activity.who, activity.info]);
+  return activities.map((activity) => [
+    activity.what,
+    activity.when,
+    activity.who,
+    activity.info,
+  ]);
 };
 
-const Activities = () => {
+const Plan = () => {
   const { user } = useAuth();
-
-  const activities = activityApi
-    .getUserActivities(user.id)
+  debugger;
+  const activities = planApi
+    .getTeamPlans(user.teamId)
     .sort((a, b) => a.when > b.when)
     .map((activity) => activityTableMapper(activity));
 
@@ -31,7 +41,7 @@ const Activities = () => {
 
   const handleActivityOpen = (id) => {
     if (!selectedActivity) {
-      const activity = activityApi.getUserActivity(user.id, id);
+      const activity = planApi.getTeamPlan(user.teamId, id);
       setSelectedActivity(activity);
       setShowActivityForm(true);
     }
@@ -42,7 +52,7 @@ const Activities = () => {
   };
 
   const handleAddUpdateActivity = (activity) => {
-    activityApi.addUpdateActivity(user.id, activity);
+    planApi.addUpdateTeamPlan(user.id, activity);
     setSelectedActivity(null);
     setShowActivityForm(false);
   };
@@ -53,7 +63,11 @@ const Activities = () => {
   };
   return (
     <div>
-      <Table headers={headers} body={activities} onRowClick={handleActivityOpen} />
+      <Table
+        headers={headers}
+        body={activities}
+        onRowClick={handleActivityOpen}
+      />
       {showActivityForm && (
         <ActivityForm
           activity={selectedActivity}
@@ -62,10 +76,14 @@ const Activities = () => {
         />
       )}
       {!showActivityForm && (
-        <input type='button' value={'Add activity'} onClick={handleAddActivity} />
+        <input
+          type="button"
+          value={"Add activity"}
+          onClick={handleAddActivity}
+        />
       )}
     </div>
   );
 };
 
-export default Activities;
+export default Plan;

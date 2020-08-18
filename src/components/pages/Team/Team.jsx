@@ -62,6 +62,12 @@ const Team = () => {
     }
   };
 
+  const handleFilterSelection = (filter) => {
+    setSelectedMember(null);
+    setSelectedFilter(filter);
+    setMemberArea(null);
+  };
+
   const handleDelete = (userId) => {
     teamApi.removeTeamMember(userId);
     setMemberArea(null);
@@ -92,7 +98,7 @@ const Team = () => {
       <Filter
         filters={availableRoles()}
         selectedFilter={selectedFilter}
-        onFilterSelection={(filter) => setSelectedFilter(filter)}
+        onFilterSelection={handleFilterSelection}
       />
       <div className="team-container">
         {availableTeamMembers().map((mem) => (
@@ -112,7 +118,7 @@ const Team = () => {
           </div>
         ))}
       </div>
-      {memberArea === memberAreas.FORM && (
+      {selectedMember && memberArea === memberAreas.FORM && (
         <TeamMemberForm
           teamMember={selectedMember}
           roles={roles}
@@ -121,19 +127,19 @@ const Team = () => {
           onCancel={handleCancel}
         />
       )}
-      {memberArea === memberAreas.DISPLAY && (
+      {selectedMember && memberArea === memberAreas.DISPLAY && (
         <TeamMemberDisplay
           teamMember={selectedMember}
           roles={roles}
           genders={genders}
-          isEditable={user.isTeamLeader}
+          isEditable={user.isTeamLeader || user.id === selectedMember.id}
           isDeletable={user.isTeamLeader && user.id !== selectedMember.id}
           onEdit={handleEditMemberInfo}
           onCancel={handleCancel}
           onDelete={handleDelete}
         />
       )}
-      {!memberArea && (
+      {!memberArea && user.isTeamLeader && (
         <input
           type="button"
           value="Add team member"

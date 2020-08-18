@@ -1,5 +1,5 @@
 import * as userApi from "./userApi";
-import * as activityApi from "./activityApi";
+import * as planApi from "./planApi";
 import * as teamApi from "./teamApi";
 
-export { userApi, activityApi, teamApi };
+export { userApi, planApi, teamApi };
