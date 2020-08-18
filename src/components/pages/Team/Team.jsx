@@ -5,6 +5,7 @@ import "./Team.css";
 import { useState } from "react";
 import TeamMemberForm from "../../features/Team/TeamMemberForm";
 import TeamMemberDisplay from "../../features/Team/TeamMemberDisplay";
+import { Filter } from "../../shared";
 
 const roles = [
   { value: "tl", name: "Team Leader" },
@@ -30,6 +31,7 @@ const Team = () => {
 
   const [selectedMember, setSelectedMember] = useState(null);
   const [memberArea, setMemberArea] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState("all");
 
   const handleMemberSelect = (member) => {
     if (member === selectedMember) {
@@ -53,14 +55,30 @@ const Team = () => {
   const handleAddUpdateTeamMember = (memberInfo) => {
     if (!memberInfo.id && memberInfo.id !== 0) {
       teamApi.addTeamMember(user.team, memberInfo);
+      setMemberArea(null);
+    } else {
+      teamApi.updateTeamMember(memberInfo);
+      setMemberArea(memberAreas.DISPLAY);
+    }
+  };
+
+  const availableRoles = () => {
+    const available = roles.filter((role) =>
+      teamMembers.map((tm) => tm.role).includes(role.value)
+    );
+
+    available.unshift({ value: "all", name: "All" });
+
+    if (teamMembers.some((tm) => !tm.role)) {
+      available.push({ value: null, name: "No Role" });
     }
 
-    teamApi.updateTeamMember(memberInfo);
-    setMemberArea(memberAreas.DISPLAY);
+    return available;
   };
 
   return (
     <div>
+      <Filter filters={availableRoles()} />
       <div className="team-container">
         {teamMembers.map((mem) => (
           <div
@@ -68,7 +86,8 @@ const Team = () => {
             className={
               "team-member " +
               (mem.id === user.id ? " me" : "") +
-              (mem === selectedMember ? " selected" : "")
+              (mem === selectedMember ? " selected" : "") +
+              (!mem.role ? " no-role" : "")
             }
             onClick={() =>
               memberArea !== memberAreas.FORM && handleMemberSelect(mem)

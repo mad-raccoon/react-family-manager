@@ -13,7 +13,10 @@ const defaultValues = {
 
 const resolver = yupResolver(
   yup.object().shape({
-    id: yup.number().nullable(),
+    id: yup
+      .number()
+      .transform((value) => (isNaN(value) ? null : value))
+      .nullable(),
     email: yup.string().email("Invalid format !").required("Required !"),
     name: yup.string().required("Required !"),
     gender: yup.string().required("Required !"),
@@ -28,7 +31,6 @@ const TeamMemberForm = ({
   onSuccess,
   onCancel,
 }) => {
-  debugger;
   const { handleSubmit, register, errors } = useForm({
     defaultValues: teamMember || defaultValues,
     resolver,

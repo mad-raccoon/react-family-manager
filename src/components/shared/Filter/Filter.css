@@ -1,0 +1,22 @@
+.filter-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: lightgray;
+}
+
+.filter-item {
+  margin: auto;
+  cursor: pointer;
+}
+
+.filter-item:hover {
+  text-decoration: underline;
+}
+
+.selected {
+  font-weight: bold;
+}

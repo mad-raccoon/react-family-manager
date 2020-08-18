@@ -22,3 +22,7 @@
 .team-member.selected {
   border: 2px solid black;
 }
+
+.team-member.no-role {
+  background-color: lightblue;
+}
