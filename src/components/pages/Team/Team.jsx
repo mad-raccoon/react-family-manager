@@ -62,6 +62,11 @@ const Team = () => {
     }
   };
 
+  const handleDelete = (userId) => {
+    teamApi.removeTeamMember(userId);
+    setMemberArea(null);
+  };
+
   const availableRoles = () => {
     const available = roles.filter((role) =>
       teamMembers.map((tm) => tm.role).includes(role.value)
@@ -76,11 +81,21 @@ const Team = () => {
     return available;
   };
 
+  const availableTeamMembers = () => {
+    if (selectedFilter === "all") return teamMembers;
+
+    return teamMembers.filter((tm) => tm.role === selectedFilter);
+  };
+
   return (
     <div>
-      <Filter filters={availableRoles()} />
+      <Filter
+        filters={availableRoles()}
+        selectedFilter={selectedFilter}
+        onFilterSelection={(filter) => setSelectedFilter(filter)}
+      />
       <div className="team-container">
-        {teamMembers.map((mem) => (
+        {availableTeamMembers().map((mem) => (
           <div
             key={mem.id}
             className={
@@ -112,8 +127,10 @@ const Team = () => {
           roles={roles}
           genders={genders}
           isEditable={user.isTeamLeader}
+          isDeletable={user.isTeamLeader && user.id !== selectedMember.id}
           onEdit={handleEditMemberInfo}
           onCancel={handleCancel}
+          onDelete={handleDelete}
         />
       )}
       {!memberArea && (

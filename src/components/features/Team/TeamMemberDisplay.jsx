@@ -1,9 +1,18 @@
-import React from 'react';
+import React from "react";
 
-const FamilyMemberDisplay = ({ teamMember, roles, genders, isEditable, onCancel, onEdit }) => {
+const FamilyMemberDisplay = ({
+  teamMember,
+  roles,
+  genders,
+  isEditable,
+  isDeletable,
+  onCancel,
+  onEdit,
+  onDelete,
+}) => {
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div style={{ display: "flex", flexDirection: "row" }}>
         <div>
           <label>Name</label>
           <br />
@@ -16,12 +25,15 @@ const FamilyMemberDisplay = ({ teamMember, roles, genders, isEditable, onCancel,
         <div>
           <label>Gender</label>
           <br />
-          <input disabled value={genders.find((gen) => gen.value === teamMember.gender).name} />
+          <input
+            disabled
+            value={genders.find((gen) => gen.value === teamMember.gender).name}
+          />
           <br />
           <label>Role</label>
           <br />
           <select value={teamMember.role} disabled>
-            <option value=''></option>
+            <option value=""></option>
             {roles.map((role) => (
               <option key={role.value} value={role.value}>
                 {role.name}
@@ -31,8 +43,15 @@ const FamilyMemberDisplay = ({ teamMember, roles, genders, isEditable, onCancel,
         </div>
       </div>
       <div>
-        {isEditable && <input type='button' value='Edit' onClick={onEdit} />}
-        <input type='button' value='Cancel' onClick={onCancel} />
+        {isEditable && <input type="button" value="Edit" onClick={onEdit} />}
+        <input type="button" value="Cancel" onClick={onCancel} />
+        {isDeletable && (
+          <input
+            type="button"
+            value="Delete"
+            onClick={() => onDelete(teamMember.id)}
+          />
+        )}
       </div>
     </>
   );
