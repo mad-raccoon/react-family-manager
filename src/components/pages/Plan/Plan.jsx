@@ -4,37 +4,37 @@ import { ActivityForm } from "../../features";
 import { planApi } from "../../../shared/apis";
 import { useAuth } from "../../../shared/hooks";
 
-const headers = ["What?", "When?", "Who?", "Info"];
+const headers = ["Area", "Description", "Limit date", "Status"];
 
-const activityTableMapper = (activity) => {
-  return {
-    id: activity.id,
-    data: [
-      activity.what,
-      activity.when.toDateString(),
-      activity.who,
-      activity.info,
-    ],
-  };
+const statusLabels = {
+  0: "To do",
+  1: "In progress",
+  2: "Done",
 };
 
-const getBody = (activities) => {
-  debugger;
-  return activities.map((activity) => [
-    activity.what,
-    activity.when,
-    activity.who,
-    activity.info,
-  ]);
+const areaLabels = {
+  tl: "Team leader",
+  db: "Database",
+  be: "Backend",
+  fe: "Frontend",
+};
+
+const planTableMapper = (plan) => {
+  return [
+    areaLabels[plan.area],
+    plan.description,
+    plan.limitDate.toDateString(),
+    statusLabels[plan.status],
+  ];
 };
 
 const Plan = () => {
   const { user } = useAuth();
-  debugger;
-  const activities = planApi
+
+  const plans = planApi
     .getTeamPlans(user.teamId)
     .sort((a, b) => a.when > b.when)
-    .map((activity) => activityTableMapper(activity));
+    .map((activity) => planTableMapper(activity));
 
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [showActivityForm, setShowActivityForm] = useState(false);
@@ -63,11 +63,7 @@ const Plan = () => {
   };
   return (
     <div>
-      <Table
-        headers={headers}
-        body={activities}
-        onRowClick={handleActivityOpen}
-      />
+      <Table headers={headers} body={plans} onRowClick={handleActivityOpen} />
       {showActivityForm && (
         <ActivityForm
           activity={selectedActivity}
