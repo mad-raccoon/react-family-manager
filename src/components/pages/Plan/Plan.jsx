@@ -21,6 +21,7 @@ const areaLabels = {
 
 const planTableMapper = (plan) => {
   return [
+    plan.id,
     areaLabels[plan.area],
     plan.description,
     plan.limitDate.toDateString(),

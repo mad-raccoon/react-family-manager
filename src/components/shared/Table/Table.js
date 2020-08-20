@@ -15,11 +15,19 @@ const Table = ({ headers, body, onRowClick }) => {
   const orderedBody = () => {
     if (orderIndex || orderIndex === 0) {
       return body.sort(function (a, b) {
-        return a[orderIndex] > b[orderIndex] ? 1 : -1;
+        return a[orderIndex + 1] > b[orderIndex + 1] ? 1 : -1;
       });
     }
 
     return body;
+  };
+
+  const getCells = (array) => {
+    const cells = [];
+    for (let index = 1; index < array.length; index++) {
+      cells.push(<td>{array[index]}</td>);
+    }
+    return cells;
   };
 
   return (
@@ -33,11 +41,7 @@ const Table = ({ headers, body, onRowClick }) => {
       </tr>
 
       {orderedBody().map((entry) => (
-        <tr>
-          {entry.map((col) => (
-            <td key={col}>{col}</td>
-          ))}
-        </tr>
+        <tr onClick={() => onRowClick(entry[0])}>{getCells(entry)}</tr>
       ))}
     </table>
   );
