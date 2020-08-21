@@ -1,9 +1,12 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { LoginPage, RegisterPage, FamilyPage } from './components/pages';
-import { AuthenticatedLayout, NotAuthenticatedLayout } from './components/layouts';
-import { useAuth } from './shared/hooks';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { LoginPage, RegisterPage, FamilyPage } from "./components/pages";
+import {
+  AuthenticatedLayout,
+  NotAuthenticatedLayout,
+} from "./components/layouts";
+import { useAuth } from "./shared/hooks";
+import "./App.css";
 
 // const PrivateRoute = ({ component: Component, ...rest }) => {
 //   const { user } = useAuth();

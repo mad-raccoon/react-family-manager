@@ -1,24 +1,11 @@
 import React from "react";
-import { teamApi } from "../../../shared/apis";
+import { teamApi, commonApi } from "../../../shared/apis";
 import { useAuth } from "../../../shared/hooks";
 import "./Team.css";
 import { useState } from "react";
 import TeamMemberForm from "../../features/Team/TeamMemberForm";
 import TeamMemberDisplay from "../../features/Team/TeamMemberDisplay";
 import { Filter } from "../../shared";
-
-const roles = [
-  { value: "tl", name: "Team Leader" },
-  { value: "fed", name: "Frontend Developer" },
-  { value: "bed", name: "Backend Developer" },
-  { value: "dbd", name: "Database Developer" },
-  { value: "tt", name: "Tester" },
-];
-
-const genders = [
-  { value: "m", name: "Male" },
-  { value: "f", name: "Female" },
-];
 
 const memberAreas = {
   DISPLAY: "display",
@@ -27,7 +14,9 @@ const memberAreas = {
 
 const Team = () => {
   const { user } = useAuth();
-  const teamMembers = teamApi.getActiveTeamMembers(user.team);
+  const teamMembers = teamApi.getActiveTeamMembers(user.teamId);
+  const roles = commonApi.getRoles();
+  const genders = commonApi.getGenders();
 
   const [selectedMember, setSelectedMember] = useState(null);
   const [memberArea, setMemberArea] = useState(null);
@@ -54,7 +43,7 @@ const Team = () => {
 
   const handleAddUpdateTeamMember = (memberInfo) => {
     if (!memberInfo.id && memberInfo.id !== 0) {
-      teamApi.addTeamMember(user.team, memberInfo);
+      teamApi.addTeamMember(user.teamId, memberInfo);
       setMemberArea(null);
     } else {
       teamApi.updateTeamMember(memberInfo);

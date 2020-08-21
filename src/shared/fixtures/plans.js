@@ -11,21 +11,21 @@ let plans = [
       },
       {
         id: 1,
-        area: "db",
+        area: "dbd",
         limitDate: new Date("09/09/2021"),
         description: "Re-structure user table",
         status: 1,
       },
       {
         id: 2,
-        area: "fe",
+        area: "fed",
         limitDate: new Date("09/09/2021"),
         description: "Design new layout for the login page",
         status: 0,
       },
       {
         id: 3,
-        area: "fe",
+        area: "fed",
         limitDate: new Date("09/09/2021"),
         description: "Add validation to the login form",
         status: 0,
@@ -55,5 +55,11 @@ export const addUpdatePlanToTeamId = (teamId, activity) => {
     plans.find((act) => act.teamId === teamId).plans.splice(index, 1);
   }
 
-  plans.find((act) => act.teamId === teamId).plans.push(activity);
+  plans
+    .find((act) => act.teamId === teamId)
+    .plans.push({
+      ...activity,
+      id:
+        activity.id || plans.find((act) => act.teamId === teamId).plans.length,
+    });
 };

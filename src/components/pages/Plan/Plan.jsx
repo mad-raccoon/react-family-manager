@@ -1,83 +1,72 @@
 import React, { useState } from "react";
 import { Table } from "../../shared";
-import { ActivityForm } from "../../features";
-import { planApi } from "../../../shared/apis";
+import { PlanForm } from "../../features";
+import { planApi, commonApi } from "../../../shared/apis";
 import { useAuth } from "../../../shared/hooks";
 
 const headers = ["Area", "Description", "Limit date", "Status"];
 
-const statusLabels = {
-  0: "To do",
-  1: "In progress",
-  2: "Done",
-};
-
-const areaLabels = {
-  tl: "Team leader",
-  db: "Database",
-  be: "Backend",
-  fe: "Frontend",
-};
-
-const planTableMapper = (plan) => {
+const planTableMapper = (plan, areas, statuses) => {
+  debugger;
   return [
     plan.id,
-    areaLabels[plan.area],
+    areas.find((a) => a.value === plan.area).name,
     plan.description,
     plan.limitDate.toDateString(),
-    statusLabels[plan.status],
+    statuses.find((s) => s.value === plan.status).name,
   ];
 };
 
 const Plan = () => {
   const { user } = useAuth();
 
+  const statuses = commonApi.getStatuses();
+  const areas = commonApi.getRoles();
+
   const plans = planApi
     .getTeamPlans(user.teamId)
     .sort((a, b) => a.when > b.when)
-    .map((activity) => planTableMapper(activity));
+    .map((plan) => planTableMapper(plan, areas, statuses));
 
-  const [selectedActivity, setSelectedActivity] = useState(null);
-  const [showActivityForm, setShowActivityForm] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [showPlanForm, setShowPlanForm] = useState(false);
 
-  const handleActivityOpen = (id) => {
-    if (!selectedActivity) {
-      const activity = planApi.getTeamPlan(user.teamId, id);
-      setSelectedActivity(activity);
-      setShowActivityForm(true);
+  const handlePlanOpen = (id) => {
+    if (!selectedPlan) {
+      const plan = planApi.getTeamPlan(user.teamId, id);
+      setSelectedPlan(plan);
+      setShowPlanForm(true);
     }
   };
 
-  const handleAddActivity = () => {
-    setShowActivityForm(true);
+  const handleAddPlan = () => {
+    setShowPlanForm(true);
   };
 
-  const handleAddUpdateActivity = (activity) => {
-    planApi.addUpdateTeamPlan(user.id, activity);
-    setSelectedActivity(null);
-    setShowActivityForm(false);
+  const handleAddUpdatePlan = (plan) => {
+    planApi.addUpdateTeamPlan(user.id, plan);
+    setSelectedPlan(null);
+    setShowPlanForm(false);
   };
 
-  const handleCancelAddUpdateActivity = () => {
-    setSelectedActivity(null);
-    setShowActivityForm(false);
+  const handleCancelAddUpdatePlan = () => {
+    setSelectedPlan(null);
+    setShowPlanForm(false);
   };
   return (
     <div>
-      <Table headers={headers} body={plans} onRowClick={handleActivityOpen} />
-      {showActivityForm && (
-        <ActivityForm
-          activity={selectedActivity}
-          onSuccess={handleAddUpdateActivity}
-          onCancel={handleCancelAddUpdateActivity}
+      <Table headers={headers} body={plans} onRowClick={handlePlanOpen} />
+      {showPlanForm && (
+        <PlanForm
+          plan={selectedPlan}
+          areas={areas}
+          statuses={statuses}
+          onSuccess={handleAddUpdatePlan}
+          onCancel={handleCancelAddUpdatePlan}
         />
       )}
-      {!showActivityForm && (
-        <input
-          type="button"
-          value={"Add activity"}
-          onClick={handleAddActivity}
-        />
+      {!showPlanForm && (
+        <input type="button" value={"Add plan"} onClick={handleAddPlan} />
       )}
     </div>
   );

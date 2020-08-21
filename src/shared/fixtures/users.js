@@ -5,7 +5,7 @@ const users = [
     name: "Rui Ribeiro",
     gender: "m",
     role: "tl",
-    team: 0,
+    teamId: 0,
     isTeamLeader: true,
     isActive: true,
   },
@@ -15,7 +15,7 @@ const users = [
     name: "Nuno Simoes",
     gender: "m",
     role: "bed",
-    team: 1,
+    teamId: 1,
     isActive: true,
   },
   {
@@ -24,7 +24,7 @@ const users = [
     name: "Martim Matos",
     gender: "m",
     role: "fed",
-    team: 0,
+    teamId: 0,
     isActive: true,
   },
   {
@@ -33,7 +33,7 @@ const users = [
     name: "Telma Fernandes",
     gender: "f",
     role: "dbd",
-    team: 0,
+    teamId: 0,
     isActive: true,
   },
   {
@@ -42,7 +42,7 @@ const users = [
     name: "Tania Afonso",
     gender: "f",
     role: "dbd",
-    team: 1,
+    teamId: 1,
     isActive: true,
   },
   {
@@ -51,7 +51,7 @@ const users = [
     name: "Miguel Gil",
     gender: "m",
     role: "bed",
-    team: 1,
+    teamId: 1,
     isActive: true,
   },
   {
@@ -60,7 +60,7 @@ const users = [
     name: "Marta Marques",
     gender: "f",
     role: null,
-    team: 0,
+    teamId: 0,
     isActive: true,
   },
 ];
@@ -79,10 +79,10 @@ export const getUserCredentialsConfirmation = (email, password) =>
   );
 
 export const getUsersByTeamId = (teamId) =>
-  users.filter((user) => user.team === teamId && user.isActive);
+  users.filter((user) => user.teamId === teamId && user.isActive);
 
 export const getAllUsersByTeamId = (teamId) =>
-  users.filter((user) => user.team === teamId);
+  users.filter((user) => user.teamId === teamId);
 
 export const createUser = (user) => {
   users.push({ ...user, id: users.length, isActive: true });

@@ -9,7 +9,7 @@ export const getHistoryTeamMembers = (teamId) => {
 };
 
 export const addTeamMember = (teamId, member) => {
-  usersBE.createUser({ ...member, team: teamId });
+  usersBE.createUser({ ...member, teamId: teamId });
 };
 
 export const updateTeamMember = (member) => {
