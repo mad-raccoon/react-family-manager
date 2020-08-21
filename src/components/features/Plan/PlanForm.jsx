@@ -8,7 +8,7 @@ const defaultValues = {
   area: null,
   description: null,
   limitDate: null,
-  status: null,
+  status: 0,
 };
 
 const resolver = yupResolver(
@@ -24,7 +24,15 @@ const resolver = yupResolver(
   })
 );
 
-const PlanForm = ({ plan, areas, statuses, onSuccess, onCancel }) => {
+const PlanForm = ({
+  plan,
+  areas,
+  statuses,
+  onSuccess,
+  onCancel,
+  onDelete,
+  isDeletable,
+}) => {
   const { handleSubmit, errors, register } = useForm({
     defaultValues: plan || defaultValues,
     resolver,
@@ -46,7 +54,7 @@ const PlanForm = ({ plan, areas, statuses, onSuccess, onCancel }) => {
             {area.name}
           </option>
         ))}
-      </select>{" "}
+      </select>
       <div className="error">{errors.area && errors.area.message}</div>
       <label>Description</label>
       <br />
@@ -73,6 +81,7 @@ const PlanForm = ({ plan, areas, statuses, onSuccess, onCancel }) => {
       <div className="error">{errors.status && errors.status.message}</div>
       <input type="submit" value={(plan ? "Update" : "Add") + " plan"} />
       <input type="button" value="Cancel" onClick={onCancel} />
+      {isDeletable && <input type="button" value="Delete" onClick={onDelete} />}
     </form>
   );
 };

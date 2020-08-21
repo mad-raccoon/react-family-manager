@@ -1,0 +1,27 @@
+.confirm-modal {
+  position: fixed;
+  z-index: 500;
+  background-color: white;
+  width: 70%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px black;
+  padding: 16px;
+  left: 15%;
+  top: 30%;
+  box-sizing: border-box;
+  transition: all 0.3s ease-out;
+}
+
+.confirm-modal-title {
+  font-weight: bold;
+  text-align: center;
+}
+
+.confirm-modal-message {
+  text-align: center;
+}
+
+.confirm-modal-button-container {
+  text-align: right;
+}

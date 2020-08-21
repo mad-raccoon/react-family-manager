@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table } from "../../shared";
+import { Table, ConfirmModal } from "../../shared";
 import { PlanForm } from "../../features";
 import { planApi, commonApi } from "../../../shared/apis";
 import { useAuth } from "../../../shared/hooks";
@@ -31,6 +31,8 @@ const Plan = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showPlanForm, setShowPlanForm] = useState(false);
 
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+
   const handlePlanOpen = (id) => {
     if (!selectedPlan) {
       const plan = planApi.getTeamPlan(user.teamId, id);
@@ -53,16 +55,32 @@ const Plan = () => {
     setSelectedPlan(null);
     setShowPlanForm(false);
   };
+
+  const handleDeletePlan = () => {
+    planApi.removeTeamPlan(user.teamId, selectedPlan.id);
+    setConfirmModalOpen(false);
+    setSelectedPlan(null);
+    setShowPlanForm(false);
+  };
+
   return (
     <div>
+      <ConfirmModal
+        isOpen={confirmModalOpen}
+        title="Delete plan"
+        message="Are you sure you want to delete this plan?"
+        onConfirm={handleDeletePlan}
+      />
       <Table headers={headers} body={plans} onRowClick={handlePlanOpen} />
       {showPlanForm && (
         <PlanForm
           plan={selectedPlan}
           areas={areas}
           statuses={statuses}
+          isDeletable={user.isTeamLeader}
           onSuccess={handleAddUpdatePlan}
           onCancel={handleCancelAddUpdatePlan}
+          onDelete={() => setConfirmModalOpen(true)}
         />
       )}
       {!showPlanForm && (

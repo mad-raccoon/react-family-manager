@@ -63,3 +63,13 @@ export const addUpdatePlanToTeamId = (teamId, activity) => {
         activity.id || plans.find((act) => act.teamId === teamId).plans.length,
     });
 };
+
+export const deletePlanByTeamId = (teamId, planId) => {
+  const index = plans
+    .find((act) => act.teamId === teamId)
+    .plans.findIndex(function (o) {
+      return o.id === planId;
+    });
+
+  plans.find((act) => act.teamId === teamId).plans.splice(index, 1);
+};
