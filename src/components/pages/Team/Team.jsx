@@ -5,7 +5,7 @@ import "./Team.css";
 import { useState } from "react";
 import TeamMemberForm from "../../features/Team/TeamMemberForm";
 import TeamMemberDisplay from "../../features/Team/TeamMemberDisplay";
-import { Filter } from "../../shared";
+import { Filter, ConfirmModal } from "../../shared";
 
 const memberAreas = {
   DISPLAY: "display",
@@ -21,7 +21,7 @@ const Team = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [memberArea, setMemberArea] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState("all");
-
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const handleMemberSelect = (member) => {
     if (member === selectedMember) {
       setSelectedMember(null);
@@ -57,11 +57,6 @@ const Team = () => {
     setMemberArea(null);
   };
 
-  const handleDelete = (userId) => {
-    teamApi.removeTeamMember(userId);
-    setMemberArea(null);
-  };
-
   const availableRoles = () => {
     const available = roles.filter((role) =>
       teamMembers.map((tm) => tm.role).includes(role.value)
@@ -82,8 +77,21 @@ const Team = () => {
     return teamMembers.filter((tm) => tm.role === selectedFilter);
   };
 
+  const handleDeleteTeamMember = () => {
+    teamApi.removeTeamMember(selectedMember.id);
+    setConfirmModalOpen(false);
+    setMemberArea(null);
+    setSelectedMember(null);
+  };
+
   return (
     <div>
+      <ConfirmModal
+        isOpen={confirmModalOpen}
+        title="Delete team member"
+        message="Are you sure you want to delete this team member?"
+        onConfirm={handleDeleteTeamMember}
+      />
       <Filter
         filters={availableRoles()}
         selectedFilter={selectedFilter}
@@ -107,7 +115,7 @@ const Team = () => {
           </div>
         ))}
       </div>
-      {selectedMember && memberArea === memberAreas.FORM && (
+      {memberArea === memberAreas.FORM && (
         <TeamMemberForm
           teamMember={selectedMember}
           roles={roles}
@@ -125,7 +133,7 @@ const Team = () => {
           isDeletable={user.isTeamLeader && user.id !== selectedMember.id}
           onEdit={handleEditMemberInfo}
           onCancel={handleCancel}
-          onDelete={handleDelete}
+          onDelete={() => setConfirmModalOpen(true)}
         />
       )}
       {!memberArea && user.isTeamLeader && (
